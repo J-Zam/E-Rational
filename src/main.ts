@@ -1,18 +1,20 @@
 import "./style.css";
-// import { data } from "./data";
+import { data } from "./data";
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 let previousMouse = { x: 0, y: 0 };
 let currentMouse = { x: 0, y: 0 };
 let hue = 0;
-// let theta = 0;
-// 9853
+let theta = 0;
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+
 const init = async () => {
-  for (let i = 0; i < 5000; i++) {
-    await sleep(10);
+
+  for (let i = 0; i < 9800; i++) {
+   await sleep(0);
+
     if (previousMouse.x !== 0) {
       currentMouse.x = previousMouse.x;
       currentMouse.y = previousMouse.y;
@@ -25,16 +27,16 @@ const init = async () => {
       previousMouse.y = currentMouse.y;
     }
 
-    //  if (data[i] === 0) theta = 100;
-    //  if (data[i] === 1) theta = 10;
-    //  if (data[i] === 2) theta = 20;
-    //  if (data[i] === 3) theta = 30;
-    //  if (data[i] === 4) theta = 40;
-    //  if (data[i] === 5) theta = 50;
-    //  if (data[i] === 6) theta = 60;
-    //  if (data[i] === 7) theta = 7;
-    //  if (data[i] === 8) theta = 80;
-    //  if (data[i] === 9) theta = 90;
+    if (data[i] === 0) theta = 5;
+    if (data[i] === 1) theta = 10;
+    if (data[i] === 2) theta = 15;
+    if (data[i] === 3) theta = 20;
+    if (data[i] === 4) theta = 25;
+    if (data[i] === 5) theta = 30;
+    if (data[i] === 6) theta = 35;
+    if (data[i] === 7) theta = 40;
+    if (data[i] === 8) theta = 45;
+    if (data[i] === 9) theta = 50;
 
     let path = new TracePath();
     path.draw();
@@ -61,36 +63,45 @@ class TracePath {
   }
 
   draw() {
-    let theta = Math.random() * 180;
-    let r = 20;
+    let r = 15;
+    let newCoordinateX = this.currMouseX + r * Math.cos(theta);
+    let newCoordinateY = this.currMouseY + r * Math.sin(theta);
 
     ctx.beginPath();
     ctx.strokeStyle = "hsl(" + hue + ", 100%, 50%)";
     ctx.moveTo(this.currMouseX, this.currMouseY);
-    ctx.lineTo(
-      this.currMouseX + r * Math.cos(theta),
-      this.currMouseY + r * Math.sin(theta)
-    );
+    
+    // avoiding messing up with the borders of the canvas
+    if (newCoordinateX < 0 || newCoordinateX >= canvas.width) {
+      (newCoordinateX < 0) ?  newCoordinateX= -newCoordinateX : newCoordinateX -= r; 
+    }
+
+    if (newCoordinateY < 0 || newCoordinateY >= canvas.height) {
+      (newCoordinateY < 0) ? newCoordinateY= -newCoordinateY : newCoordinateY -= r; 
+    }
+
+    ctx.lineTo(newCoordinateX, newCoordinateY);
     ctx.lineTo(this.prevMouseX, this.prevMouseY);
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
     ctx.stroke();
     ctx.closePath();
     ctx.save();
 
     ctx.beginPath();
     ctx.fillStyle = "hsl(" + hue + ", 100%, 50%)";
-    ctx.arc(this.currMouseX, this.currMouseY, 3, 0, Math.PI * 2);
+    ctx.arc(this.currMouseX, this.currMouseY, 3.5, 0, Math.PI * 2);
     ctx.fill();
 
-    previousMouse.x = this.currMouseX + r * Math.cos(theta);
-    previousMouse.y = this.currMouseY + r * Math.sin(theta);
+    previousMouse.x = newCoordinateX;
+    previousMouse.y = newCoordinateY;
   }
 }
-
-init();
 
 export function sleep(ms: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
+
+init();
+
