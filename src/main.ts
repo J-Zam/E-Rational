@@ -13,7 +13,7 @@ canvas.height = window.innerHeight;
 const init = async () => {
 
   for (let i = 0; i < 9800; i++) {
-   await sleep(0);
+    await sleep(0);
 
     if (previousMouse.x !== 0) {
       currentMouse.x = previousMouse.x;
@@ -21,8 +21,8 @@ const init = async () => {
     }
 
     if (previousMouse.x === 0) {
-      currentMouse.x = canvas.width / 2;
-      currentMouse.y = canvas.height / 2;
+      currentMouse.x = 0;
+      currentMouse.y = 0;
       previousMouse.x = currentMouse.x;
       previousMouse.y = currentMouse.y;
     }
@@ -63,7 +63,7 @@ class TracePath {
   }
 
   draw() {
-    let r = 15;
+    let r = 25;
     let newCoordinateX = this.currMouseX + r * Math.cos(theta);
     let newCoordinateY = this.currMouseY + r * Math.sin(theta);
 
