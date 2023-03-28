@@ -11,6 +11,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 const init = async () => {
+  const angle = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
 
   for (let i = 0; i < 9800; i++) {
     await sleep(0);
@@ -27,17 +28,7 @@ const init = async () => {
       previousMouse.y = currentMouse.y;
     }
 
-    if (data[i] === 0) theta = 5;
-    if (data[i] === 1) theta = 10;
-    if (data[i] === 2) theta = 15;
-    if (data[i] === 3) theta = 20;
-    if (data[i] === 4) theta = 25;
-    if (data[i] === 5) theta = 30;
-    if (data[i] === 6) theta = 35;
-    if (data[i] === 7) theta = 40;
-    if (data[i] === 8) theta = 45;
-    if (data[i] === 9) theta = 50;
-
+    theta = angle[data[i]];
     let path = new TracePath();
     path.draw();
     hue += 0.2;
